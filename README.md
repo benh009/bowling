@@ -1,4 +1,4 @@
-# bowling
+# Bowling
 
 Prière de développer en C# un programme qui compte les points d'une partie de bowling, sous forme d'un programme console en ligne de commande.
 L'idée est de reproduire vaguement l'information affichée sur la TV qui affiche le score au-dessus de l'allée de bowling. Google is your friend pour en trouver des exemples.
@@ -16,3 +16,10 @@ Prière de fournir le code source et l'exe compilé (prêt à l'emploi). pas par
 Vous serez jugé sur 
 - la qualité du programme: Le score est-il bien calculé dans tous les cas ?
 - la qualité du code: lisibilité, bonnes pratiques (DI, unit tests,...), etc...  En d'autres termes, vos collègues seront-ils contents quand ils doivent plonger dans votre code ?
+
+# Run code
+
+``` DOS  
+cd Bowling 
+dotnet run 1 2 3
+```
