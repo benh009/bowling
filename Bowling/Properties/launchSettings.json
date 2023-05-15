@@ -2,7 +2,7 @@
   "profiles": {
     "bowling": {
       "commandName": "Project",
-      "commandLineArgs": "1 2 9 1 4"
+      "commandLineArgs": "10 10 10 10 10 10 10 10 10 0 10 10"
     }
   }
 }

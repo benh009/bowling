@@ -6,6 +6,9 @@
         public int PinsDown { get; }
         public int? LastThrowPinsDown { get; }
         public bool IsFinal { get; set; }
+        public const string StrikeString = "X";
+        public const string SpareString = "/";
+
         public Throw(int pinsDown, ThrowType throwType, int lastThrowPinsDown, bool isFinal = false) : this(pinsDown, throwType)
         {
             this.IsFinal = isFinal;
@@ -23,24 +26,36 @@
 
         public override string ToString()
         {
-            if (IsFinal && PinsDown == Game.NumberOfPins)
+            if (PinsDown == Game.NumberOfPins)
             {
-                return "X";
-            }
-
-            if (ThrowType == ThrowType.First && PinsDown == Game.NumberOfPins)
-            {
-                return "X";
+                if (ThrowType == ThrowType.First)
+                {
+                    return StrikeString;
+                }
+                if (IsFinal)
+                {
+                    if (ThrowType == ThrowType.Second && LastThrowPinsDown == Game.NumberOfPins)
+                    {
+                        return StrikeString;
+                    }
+                    else if (ThrowType == ThrowType.Third)
+                    {
+                        return StrikeString;
+                    }
+                }
             }
 
             if (ThrowType == ThrowType.Third && PinsDown + LastThrowPinsDown == Game.NumberOfPins)
             {
-                return "/";
+                return SpareString;
             }
 
             if (ThrowType == ThrowType.Second && PinsDown + LastThrowPinsDown == Game.NumberOfPins)
             {
-                return "/";
+                if (LastThrowPinsDown != Game.NumberOfPins)
+                {
+                    return SpareString;
+                }
             }
             return $"{PinsDown}";
         }
@@ -52,7 +67,12 @@
                 return;
             }
 
-            if (IsFinal && lastThrowPinsDown + pinsDown == Game.NumberOfPins)
+            if (IsFinal && ThrowType == ThrowType.Second && lastThrowPinsDown + pinsDown == Game.NumberOfPins)
+            {
+                return;
+            }
+
+            if (IsFinal && ThrowType == ThrowType.Third)
             {
                 return;
             }

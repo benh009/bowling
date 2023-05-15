@@ -6,7 +6,6 @@ namespace Bowling
     {
         public const int MaxNumberOfFrames = 10;
         public const int NumberOfPins = 10;
-
         public IList<Frame> Frames { get; set; }
 
         public Game()
@@ -86,8 +85,9 @@ namespace Bowling
             var stringBuilder = new StringBuilder();
             foreach (var frame in Frames)
             {
-                stringBuilder.Append($"Frame Number : {frameNumber}\n");
-                stringBuilder.Append($"{frame}\n");
+                stringBuilder.AppendLine($"Frame Number : {frameNumber}");
+                stringBuilder.AppendLine($"{frame}");
+                stringBuilder.AppendLine();
                 frameNumber++;
             }
             return stringBuilder.ToString();

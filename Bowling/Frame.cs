@@ -3,12 +3,9 @@
     public class Frame
     {
         public List<Throw> Throws { get; }
-
         public bool IsFinal { get; set; }
-
-        private Frame PreviousFrame { get; }
-
         public Frame NextFrame { get; set; }
+        private Frame PreviousFrame { get; }
 
         public Frame(Frame previousFrame) : this()
         {
@@ -169,7 +166,8 @@
 
         public string DisplayScore()
         {
-            return GetScore() == null ? "" : GetScore().ToString();
+            var score = GetScore();
+            return score == null ? "" : score.Value.ToString();
         }
 
         public override string ToString()
