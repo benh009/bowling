@@ -32,7 +32,7 @@ namespace Bowling
                 }
                 else
                 {
-                    lastFrame.AddThrow(new Throw(throwInput.PinsDown, ThrowType.Second, lastFrame.Throws[0].PinsDown));
+                    lastFrame.AddThrow(new Throw(throwInput.PinsDown, ThrowType.Second, lastFrame.Throws[0]));
                 }
             }
         }
@@ -41,11 +41,11 @@ namespace Bowling
         {
             if (lastFrame.Throws.Count() == 1)
             {
-                lastFrame.AddThrow(new Throw(throwInput.PinsDown, ThrowType.Second, lastFrame.Throws[0].PinsDown, true));
+                lastFrame.AddThrow(new Throw(throwInput.PinsDown, ThrowType.Second, lastFrame.Throws[0], true));
             }
             else
             {
-                lastFrame.AddThrow(new Throw(throwInput.PinsDown, ThrowType.Third, lastFrame.Throws[1].PinsDown, true));
+                lastFrame.AddThrow(new Throw(throwInput.PinsDown, ThrowType.Third, lastFrame.Throws[1], true));
             }
         }
 
@@ -61,7 +61,7 @@ namespace Bowling
         {
             var frame = new Frame();
             Frames.Add(frame);
-            frame.AddThrow(new Throw(pinsDown, ThrowType.First, 0));
+            frame.AddThrow(new Throw(pinsDown, ThrowType.First, null));
         }
         private void CreateNextFrame(int pinsDown, Frame previousFrame)
         {

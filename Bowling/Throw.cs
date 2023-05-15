@@ -4,27 +4,43 @@
     {
         public ThrowType ThrowType { get; }
         public int PinsDown { get; }
-        public int? LastThrowPinsDown { get; }
+        public Throw LastThrow { get; }
         public bool IsFinal { get; set; }
         public const string StrikeString = "X";
         public const string SpareString = "/";
 
-        public Throw(int pinsDown, ThrowType throwType, int lastThrowPinsDown, bool isFinal = false) : this(pinsDown, throwType)
+        public Throw(int pinsDown, ThrowType throwType, Throw lastThrow, bool isFinal = false) : this(pinsDown, throwType)
         {
             this.IsFinal = isFinal;
-            CheckValidatePinDown(lastThrowPinsDown);
-            CheckValidateSumPinDown(pinsDown, lastThrowPinsDown);
-            LastThrowPinsDown = lastThrowPinsDown;
+            LastThrow = lastThrow;
+            CheckValidateSumPinDown();
         }
 
         public Throw(int pinsDown, ThrowType throwType)
         {
-            CheckValidatePinDown(pinsDown);
             PinsDown = pinsDown;
             ThrowType = throwType;
+            CheckValidatePinDown();
         }
 
         public override string ToString()
+        {
+            var toStringStrike = ToStringStrike();
+            if (toStringStrike != null)
+            {
+                return toStringStrike;
+            }
+
+            var toStringSpare = ToStringSpare();
+            if (toStringSpare != null)
+            {
+                return toStringSpare;
+            }
+
+            return $"{PinsDown}";
+        }
+
+        private string ToStringStrike()
         {
             if (PinsDown == Game.NumberOfPins)
             {
@@ -34,58 +50,72 @@
                 }
                 if (IsFinal)
                 {
-                    if (ThrowType == ThrowType.Second && LastThrowPinsDown == Game.NumberOfPins)
+                    if (ThrowType == ThrowType.Second && LastThrow.PinsDown == Game.NumberOfPins)
                     {
                         return StrikeString;
                     }
-                    else if (ThrowType == ThrowType.Third)
+                    else if (ThrowType == ThrowType.Third && LastThrow.PinsDown != 0)
                     {
                         return StrikeString;
                     }
                 }
             }
 
-            if (ThrowType == ThrowType.Third && PinsDown + LastThrowPinsDown == Game.NumberOfPins)
+            return null;
+
+        }
+        private string ToStringSpare()
+        {
+            if (ThrowType == ThrowType.Third && PinsDown + LastThrow.PinsDown == Game.NumberOfPins)
             {
                 return SpareString;
             }
 
-            if (ThrowType == ThrowType.Second && PinsDown + LastThrowPinsDown == Game.NumberOfPins)
+            if (ThrowType == ThrowType.Second && PinsDown + LastThrow.PinsDown == Game.NumberOfPins)
             {
-                if (LastThrowPinsDown != Game.NumberOfPins)
+                if (LastThrow.PinsDown != Game.NumberOfPins)
                 {
                     return SpareString;
                 }
             }
-            return $"{PinsDown}";
+            return null;
         }
 
-        private void CheckValidateSumPinDown(int pinsDown, int lastThrowPinsDown)
+        private void CheckValidateSumPinDown()
         {
-            if (IsFinal && lastThrowPinsDown == Game.NumberOfPins)
+            if (LastThrow == null)
+            {
+                return;
+            }
+            if (IsFinal && LastThrow.PinsDown == Game.NumberOfPins)
             {
                 return;
             }
 
-            if (IsFinal && ThrowType == ThrowType.Second && lastThrowPinsDown + pinsDown == Game.NumberOfPins)
+            if (IsFinal && ThrowType == ThrowType.Second && LastThrow.PinsDown + PinsDown == Game.NumberOfPins)
             {
                 return;
             }
 
-            if (IsFinal && ThrowType == ThrowType.Third)
+            if (IsFinal && ThrowType == ThrowType.Third && LastThrow.PinsDown == Game.NumberOfPins && LastThrow.LastThrow.PinsDown == Game.NumberOfPins)
             {
                 return;
             }
 
-            if (pinsDown + lastThrowPinsDown > Game.NumberOfPins)
+            if (IsFinal && ThrowType == ThrowType.Third && LastThrow.PinsDown + LastThrow.LastThrow.PinsDown == Game.NumberOfPins)
+            {
+                return;
+            }
+
+            if (PinsDown + LastThrow.PinsDown > Game.NumberOfPins)
             {
                 throw new ArgumentException($"Sum of pinsDown must be between 0 and {Game.NumberOfPins}");
             }
         }
 
-        private void CheckValidatePinDown(int pinsDown)
+        private void CheckValidatePinDown()
         {
-            if (pinsDown < 0 || pinsDown > Game.NumberOfPins)
+            if (PinsDown < 0 || PinsDown > Game.NumberOfPins)
             {
                 throw new ArgumentException($"PinsDown must ne between 0 and {Game.NumberOfPins}");
             }
