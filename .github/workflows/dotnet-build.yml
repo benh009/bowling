@@ -38,7 +38,7 @@ jobs:
         dotnet-version: 7.0.x
         
     - name: Install dependencies
-      run: dotnet restore  ./Bowling
+      run: dotnet restore ./Bowling
       
     - name: Build
       run: dotnet build ./Bowling --configuration Release --no-restore      
